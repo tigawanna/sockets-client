@@ -32,7 +32,7 @@ export const Chats: React.FC<ChatsProps> = ({ socket, user, room }) => {
     };
   }, [socket]);
 
-  const [input, setInput] = useState({ message: "hello world", time: "" });
+  const [input, setInput] = useState({ message: "", time: "" });
 
   const handleChange = async (e: any) => {
     const { value } = e.target;

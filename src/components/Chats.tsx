@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Socket } from "socket.io-client";
-
+import {AiOutlineSend } from 'react-icons/ai';
+import { IconContext } from "react-icons";
 interface ChatsProps {
   socket: Socket;
   user: string;
@@ -59,7 +60,7 @@ export const Chats: React.FC<ChatsProps> = ({ socket, user, room }) => {
 
       <div
         className="w-full  flex flex-col items-center overflow-y-scroll 
-   h-[80vh] p-2 scroll-bar"
+         h-[80vh] p-2 scroll-bar"
       >
         {messages &&
           messages.map((chat: Chat, index: number) => {
@@ -70,15 +71,25 @@ export const Chats: React.FC<ChatsProps> = ({ socket, user, room }) => {
       <form className="w-full p-1 fixed bottom-0">
         <div className="flex-center">
           <input
-            className="w-[80%] md:w-[50%] p-2 m-1"
+            className="w-[80%] md:w-[50%] p-2 m-1 border-black border-2 rounded-sm "
             id="message"
             placeholder="type.."
             onChange={handleChange}
             value={input.message}
           />
-          <button className="p-2 bg-slate-600" onClick={handleSubmit}>
-            &#9658;
-          </button>
+            <IconContext.Provider
+            value={{
+              size: "30px",
+              className: "mx-1",
+            }}
+            
+          >
+           <AiOutlineSend  onClick={handleSubmit}/>
+
+          </IconContext.Provider>
+         
+        
+
         </div>
       </form>
     </div>
@@ -91,7 +102,7 @@ interface ChatCardProps {
 
 export const Chatcard: React.FC<ChatCardProps> = ({ chat }) => {
   return (
-    <div className="w-[80%] flex-center-col bg-slate-500 rounded-md m-2 p-2 flex justify-between">
+    <div className="w-[80%] flex-center-col bg-slate-800 text-white rounded-md m-2 p-2 flex justify-between">
       <div className="w-full text-lg font-semibold">{chat.message}</div>
 
       <div className="w-full flex  text-sm">

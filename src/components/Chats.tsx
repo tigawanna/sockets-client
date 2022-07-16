@@ -2,14 +2,15 @@ import React, { useState, useEffect } from "react";
 import { Socket } from "socket.io-client";
 import {AiOutlineSend } from 'react-icons/ai';
 import { IconContext } from "react-icons";
+
 interface ChatsProps {
   socket: Socket;
-  user: string;
-  room: string;
-}
-type Chat = { message: string; time: string };
+  user: { username: string; room: string;}
 
-export const Chats: React.FC<ChatsProps> = ({ socket, user, room }) => {
+}
+type Chat = { newMessage:{message: string; time: string},user:string };
+
+export const Chats: React.FC<ChatsProps> = ({ socket,user}) => {
   const tyme =
     new Date(Date.now()).getHours() +
     ":" +
@@ -52,7 +53,7 @@ export const Chats: React.FC<ChatsProps> = ({ socket, user, room }) => {
     }
   };
 
-  // console.log("messages ==== ",messages)
+  console.log("messages ==== ",messages)
 
   return (
     <div className="max-h-[95vh]  overflow-x-hidden overflow-y-hiddenflex flex-col ">
@@ -64,7 +65,7 @@ export const Chats: React.FC<ChatsProps> = ({ socket, user, room }) => {
       >
         {messages &&
           messages.map((chat: Chat, index: number) => {
-            return <Chatcard chat={chat} key={index} />;
+            return <Chatcard  key={index} chat={chat} user={user}/>;
           })}
       </div>
 
@@ -98,17 +99,28 @@ export const Chats: React.FC<ChatsProps> = ({ socket, user, room }) => {
 
 interface ChatCardProps {
   chat: Chat;
+  user: { username: string; room: string;}
+
 }
 
-export const Chatcard: React.FC<ChatCardProps> = ({ chat }) => {
+export const Chatcard: React.FC<ChatCardProps> = ({ chat,user }) => {
   return (
-    <div className="w-[80%] flex-center-col bg-slate-800 text-white rounded-md m-2 p-2 flex justify-between">
-      <div className="w-full text-lg font-semibold">{chat.message}</div>
+    <div className="flex-center w-full m-2">
+    <div className="capitalize p-5 h-6 w-6 text-xl font-bold mr-1 border border-slate-400
+        rounded-[50%] flex-center"> {chat?.user[0]}</div>
+  
+  <div className="w-[80%] h-full  bg-slate-800 text-white rounded-md
+     m-1 p-2 flex justify-between items-center">
+ 
+      <div className="max-w-[80%] h-fit break-words whitespace-normal text-mdfont-normal">
+        {chat?.newMessage.message}
+        </div>
 
-      <div className="w-full flex  text-sm">
-        <div className="w-full ">{"human"}</div>
-        <div className="w-full  flex justify-end">{chat.time}</div>
+        <div className="w-[10%] h-full flex flex-col justify-end items-stretch text-sm ">
+        <div className="w-full ">{chat?.user}</div>
+        <div className="w-full ">{chat?.newMessage.time}</div>
       </div>
+    </div>
     </div>
   );
 };

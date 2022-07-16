@@ -1,11 +1,12 @@
 import { useState,useEffect } from "react";
 import io from "socket.io-client";
-import queryString from "query-string";
-import { Chats } from "./components/Chats";
+
 import { Routes, Route} from "react-router-dom";
 import { BrowserRouter} from "react-router-dom";
 import { Toolbar } from './components/Toolbar';
 import { Test } from './components/Test';
+import { MainChatRoom } from './components/MainChatRoom';
+import { JoinRoom } from './components/JoinRoom';
 
 
 function App() {
@@ -19,7 +20,8 @@ function App() {
     },
   });
 
-  const [input, setInput] = useState({ username: "", room: "" });
+
+
 
   return (
     <div
@@ -30,16 +32,17 @@ function App() {
         <div className="fixed top-[0px] w-[100%] z-60">
         <Toolbar/>
         </div>
-        <div className="w-full h-full mt-16 ">
+        <div className="w-full h-full  mt-5">
           <Routes>
             <Route
               path="/"
-              element={<Chats socket={socket} room={input.room} user={input.username} />}
+              element={<MainChatRoom socket={socket} />}
             />
             <Route
               path="/test"
               element={
-              <Test/>
+                // @ts-ignore
+              <JoinRoom/>
             }
             />
          </Routes>

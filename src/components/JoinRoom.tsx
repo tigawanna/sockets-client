@@ -8,6 +8,7 @@ socket:Socket
 }
 
 export const JoinRoom: React.FC<JoinRoomProps> = ({setOpen,socket}) => {
+    
 const [input, setInput] = useState({ username: "", room: "general" });
 const [error, setError] = useState({ name:"", message:"" });
 
@@ -23,8 +24,10 @@ const handleChange = async (e: any) => {
         e.preventDefault();
         if(input.username !== ""){
         localStorage.setItem("user-room",JSON.stringify(input));
+
         socket.emit('join',{name:input.username,room:input.room}, (error:any) => {
         if(error) {alert(error);}})
+
         setOpen(false)
         }
         else{

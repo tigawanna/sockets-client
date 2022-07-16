@@ -8,7 +8,7 @@ interface ChatsProps {
   user: { username: string; room: string;}
 
 }
-type Chat = { newMessage:{message: string; time: string},user:string };
+type Chat ={ newMessage:{message: string; time: string,user:string }};
 
 export const Chats: React.FC<ChatsProps> = ({ socket,user}) => {
   const tyme =
@@ -21,14 +21,19 @@ export const Chats: React.FC<ChatsProps> = ({ socket,user}) => {
   const [messages, setMesages] = useState<any>([]);
 
   const EVENT = "new_message_added";
+  const ROOM = "room_data";
 
   useEffect(() => {
     socket.on(EVENT, (msg) => {
       // console.log("msg ==== ",msg)
       setMesages((prev: any) => [...prev, msg]);
     });
+    // socket.on(ROOM, (msg) => {
+    //   console.log("room details ==== ",msg)
+    //   setRoom(msg)
+    // });
 
-    // unbind the event handler when the component gets unmounted
+   // unbind the event handler when the component gets unmounted
     return () => {
       socket.off(EVENT);
     };
@@ -46,14 +51,15 @@ export const Chats: React.FC<ChatsProps> = ({ socket,user}) => {
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-    if (input.message !== "") {
-      const message = { message: input.message, time: tyme };
+    // console.log("user name in form ====",user)
+    if (input.message !== "" || user.username !=="") {
+      const message = { message: input.message, time: tyme,user:user.username };
       // console.log("message ====",message)
       await socket.emit("new_message", message);
     }
   };
 
-  console.log("messages ==== ",messages)
+  // console.log("messages ==== ",messages)
 
   return (
     <div className="max-h-[95vh]  overflow-x-hidden overflow-y-hiddenflex flex-col ">
@@ -77,6 +83,7 @@ export const Chats: React.FC<ChatsProps> = ({ socket,user}) => {
             placeholder="type.."
             onChange={handleChange}
             value={input.message}
+            required={true}
           />
             <IconContext.Provider
             value={{
@@ -104,12 +111,13 @@ interface ChatCardProps {
 }
 
 export const Chatcard: React.FC<ChatCardProps> = ({ chat,user }) => {
+  // console.log("chat in chat card ==== ",chat)
   return (
     <div className="flex-center w-full m-2">
     <div className="capitalize p-5 h-6 w-6 text-xl font-bold mr-1 border border-slate-400
-        rounded-[50%] flex-center"> {chat?.user[0]}</div>
+        rounded-[50%] flex-center"> {chat?.newMessage.user[0]}</div>
   
-  <div className="w-[80%] h-full  bg-slate-800 text-white rounded-md
+  <div className="w-[80%] h-full border border-slate-800  rounded-md
      m-1 p-2 flex justify-between items-center">
  
       <div className="max-w-[80%] h-fit break-words whitespace-normal text-mdfont-normal">
@@ -117,7 +125,7 @@ export const Chatcard: React.FC<ChatCardProps> = ({ chat,user }) => {
         </div>
 
         <div className="w-[10%] h-full flex flex-col justify-end items-stretch text-sm ">
-        <div className="w-full ">{chat?.user}</div>
+        <div className="w-full ">{chat?.newMessage.user}</div>
         <div className="w-full ">{chat?.newMessage.time}</div>
       </div>
     </div>

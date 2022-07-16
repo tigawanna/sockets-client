@@ -3,7 +3,9 @@ import io from "socket.io-client";
 import { Chats } from "./components/Chats";
 
 function App() {
-  const socket = io("https://sockets-server-ke.herokuapp.com/", {
+  const devUrl="http://localhost:4000"
+  const prodUrl="https://sockets-server-ke.herokuapp.com/"
+  const socket = io(devUrl, {
     transports: ["websocket"],
     withCredentials: true,
     extraHeaders: {

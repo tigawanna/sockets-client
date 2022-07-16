@@ -14,4 +14,8 @@ npm run preview to preview te built app
 
 Works with a simple nodejs backeend [server code](https://github.com/tigawanna/sockets-server)
 
+
 Just hop in and chat , messages are broadcast to all the clients currently connected and no data is persisted 
+
+helpfull links :
+how to deploy a vite react app to github pages : [dev.to article](https://dev.to/shashannkbawa/deploying-vite-app-to-github-pages-3ane)

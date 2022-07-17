@@ -1,6 +1,5 @@
-import React,{useEffect} from 'react'
+import React from 'react'
 import { Chats } from './Chats';
-import { useState } from 'react';
 import { JoinRoom } from './JoinRoom';
 
 

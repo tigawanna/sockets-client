@@ -35,7 +35,7 @@ const useChat = (roomId:string) => {
       setUser(aUser)
       setUserExists(true)
       socketRef.current = socketIOClient(devUrl, {
-        query: { roomId,aUser },
+        query: { roomId,user:aUser.username },
           transports: ["websocket"],
           withCredentials: true,
           extraHeaders:{"my-custom-header": "abcd"}

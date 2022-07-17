@@ -36,7 +36,7 @@ const useChat = (roomId:string) => {
       // console.log("aUser not join on hook load=== ",aUser)
       setUser(aUser)
       setUserExists(true)
-      socketRef.current = socketIOClient(lanUrl, {
+      socketRef.current = socketIOClient(prodUrl, {
         query: { room:aUser.room,user:aUser.username },
           transports: ["websocket"],
           withCredentials: true,

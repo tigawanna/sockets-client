@@ -1,54 +1,28 @@
-import React from 'react'
+import React,{useEffect} from 'react'
 import { Chats } from './Chats';
-import { Socket } from "socket.io-client";
 import { useState } from 'react';
 import { JoinRoom } from './JoinRoom';
-import { useEffect } from 'react';
-import io from "socket.io-client";
 
+
+
+interface User{username:string ; room:string}
 interface MainChatRoomProps {
-socket:Socket
-}
-interface User{
-username:string
-room:string
-
-}
-
-export const MainChatRoom: React.FC<MainChatRoomProps> = ({socket}) => {
-    
-let aUser={username:"",room:"general"}
-const [user, setUser] = useState(aUser);
-
-
-  
-const EVENT = "join";
-
-useEffect(() => {
-const user_room= localStorage.getItem("user-room");
-if(!user_room || user_room === null){
-// console.log("nothing to see here",user_room)
-setOpen(true)
-}else{
-//@ts-ignore
-aUser = JSON.parse(user_room); 
-// console.log("aUser not null on join=== ",aUser)
-setUser(aUser)
-socket.emit('join',{name:aUser.username,room:aUser.room}, (error:any) => {
-if(error) {alert(error);}})
+messages:any ;
+user:User
+setUser: React.Dispatch<any>
+sendMessage: (message: any) => void
+userExists: boolean
+setUserExists: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-// unbind the event handler when the component gets unmounted
-return () => {
-socket.off(EVENT);};
-}, [socket]);
+
+export const MainChatRoom: React.FC<MainChatRoomProps> = ({user,setUser,messages,sendMessage,userExists,setUserExists}) => {
 
 
-const [open, setOpen] = useState(false);
 return (
  <div className='h-full w-full'>
-  {open?<JoinRoom setOpen={setOpen} socket={socket}/>:<Chats socket={socket} 
-  user={user} />}
+  {userExists?<Chats user={user} messages={messages} sendMessage={sendMessage}/>:
+  <JoinRoom setUser={setUser} setUserExists={setUserExists}/>}
  </div>
 );
 }

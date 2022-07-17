@@ -1,13 +1,13 @@
 import React, {useState, useEffect} from "react";
-import queryString from "query-string";
-import { Socket } from 'socket.io-client';
+
 
 interface JoinRoomProps {
-setOpen: React.Dispatch<React.SetStateAction<boolean>>
-socket:Socket
+setUser: React.Dispatch<any>
+setUserExists: React.Dispatch<React.SetStateAction<boolean>>
+
 }
 
-export const JoinRoom: React.FC<JoinRoomProps> = ({setOpen,socket}) => {
+export const JoinRoom: React.FC<JoinRoomProps> = ({setUser,setUserExists}) => {
     
 const [input, setInput] = useState({ username: "", room: "general" });
 const [error, setError] = useState({ name:"", message:"" });
@@ -21,26 +21,23 @@ const handleChange = async (e: any) => {
       };
     
  const handleSubmit = async (e: any) => {
-        e.preventDefault();
-        if(input.username !== ""){
-        localStorage.setItem("user-room",JSON.stringify(input));
 
-        socket.emit('join',{name:input.username,room:input.room}, (error:any) => {
-        if(error) {alert(error);}})
+  e.preventDefault();
+  if(input.username !== ""){
+  localStorage.setItem("user-room",JSON.stringify(input));
+  setUser(input)
+  setUserExists(true)
+  }
+  else{
+  setError({name:"username",message:"nick name needed"})
+  }
 
-        setOpen(false)
-        }
-        else{
-        setError({name:"username",message:"nick name needed"})
-        }
-
-      };   
+  };   
   const isError=()=>{
-    if(error.name === ""){
-     return false
-    }
-    return true
-     }
+  if(error.name === "") return false
+  return true}
+
+
 return (
  <div className="h-full w-full flex-center-col bg-gradient-to-l from-cyan-900 to-purple-900">
         <form className="w-[95%] md:w-[50%] p-3 bg-slate-700 rounded-lg text-white shadow-lg

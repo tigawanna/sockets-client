@@ -8,6 +8,8 @@ const ROOM_DATA = "room_data";
 const devUrl="http://localhost:4000"
 const prodUrl="https://sockets-server-ke.herokuapp.com/"
 
+
+
 const useChat = (roomId:string) => {
 
 
@@ -46,15 +48,27 @@ const useChat = (roomId:string) => {
     setMessages((prev: any) => [...prev, msg]);
   });
 
+  // socketRef.current?.on(ROOM_DATA, (msg:any) => {
+  //   console.log("room data  ==== ",msg)
+ 
+  //   setRoom(msg)
+  // });
+
   socketRef.current?.on(ROOM_DATA, (msg:any) => {
-    // console.log("room data  ==== ",msg)
+    console.log("room data  ==== ",msg)
+ 
     setRoom(msg)
   });
 
-
-
 return () => {socketRef.current?.disconnect();};
-  }, [room,roomId,userExists]);
+  }, [roomId,userExists]);
+
+
+ 
+
+ 
+ 
+  
 
 
   const sendMessage = (message:any) => {

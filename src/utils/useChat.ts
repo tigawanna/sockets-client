@@ -54,7 +54,7 @@ const useChat = (roomId:string) => {
 
 
 return () => {socketRef.current?.disconnect();};
-  }, [roomId,userExists]);
+  }, [,room,roomId,userExists]);
 
 
   const sendMessage = (message:any) => {

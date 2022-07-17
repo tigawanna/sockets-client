@@ -1,8 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import socketIOClient ,{Socket} from "socket.io-client";
 
-const NEW_CHAT_MESSAGE_EVENT = "newChatMessage";
-const SOCKET_SERVER_URL = "http://localhost:4000";
+
 const NEW_MESSAGE_ADDAED = "new_message_added";
 const ROOM_DATA = "room_data";
 
@@ -34,7 +33,7 @@ const useChat = (roomId:string) => {
       // console.log("aUser not join on hook load=== ",aUser)
       setUser(aUser)
       setUserExists(true)
-      socketRef.current = socketIOClient(devUrl, {
+      socketRef.current = socketIOClient(prodUrl, {
         query: { roomId,user:aUser.username },
           transports: ["websocket"],
           withCredentials: true,

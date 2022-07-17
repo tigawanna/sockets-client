@@ -6,14 +6,14 @@ import { Toolbar } from './components/Toolbar';
 
 function App() {
 
- const {user,setUser,room,messages,sendMessage,userExists,setUserExists} = useChat("genaral")
+ const {setRoom,user,setUser,room,messages,sendMessage,userExists,setUserExists} = useChat("genaral")
  console.log("room ==== ",room)
   return (
-    <div className="scroll-bar flex h-screen w-screen">
+    <div className="scroll-bar flex flex-col justify-between h-screen w-screen ">
       <div className="fixed top-[0px] w-[100%] z-60">
-        <Toolbar room={room}/>
+        <Toolbar room={room} setUserExists={setUserExists} setRoom={setRoom}/>
       </div>
-    <div className="w-full h-full  mt-12">  
+    <div className="w-full h-[90%] mt-12  ">  
     <MainChatRoom messages={messages} user={user} setUser={setUser} sendMessage={sendMessage}
     userExists={userExists} setUserExists={setUserExists}
     />

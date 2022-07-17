@@ -6,6 +6,7 @@ const NEW_MESSAGE_ADDAED = "new_message_added";
 const ROOM_DATA = "room_data";
 
 const devUrl="http://localhost:4000"
+const lanUrl="http://192.168.43.238:4000"
 const prodUrl="https://sockets-server-ke.herokuapp.com/"
 
 
@@ -35,8 +36,8 @@ const useChat = (roomId:string) => {
       // console.log("aUser not join on hook load=== ",aUser)
       setUser(aUser)
       setUserExists(true)
-      socketRef.current = socketIOClient(prodUrl, {
-        query: { roomId,user:aUser.username },
+      socketRef.current = socketIOClient(lanUrl, {
+        query: { room:aUser.room,user:aUser.username },
           transports: ["websocket"],
           withCredentials: true,
           extraHeaders:{"my-custom-header": "abcd"}
@@ -45,7 +46,7 @@ const useChat = (roomId:string) => {
 
    socketRef.current?.on(NEW_MESSAGE_ADDAED, (msg:any) => {
     // console.log("new message  added==== ",msg)
-    setMessages((prev: any) => [...prev, msg]);
+    setMessages((prev: any) => [msg,...prev]);
   });
 
   // socketRef.current?.on(ROOM_DATA, (msg:any) => {
@@ -72,7 +73,7 @@ return () => {socketRef.current?.disconnect();};
 
 
   const sendMessage = (message:any) => {
-  //  console.log("sending message === ",message)
+   console.log("sending message ..... === ",message)
     socketRef.current?.emit("new_message", message)
   };
 
@@ -81,7 +82,7 @@ return () => {socketRef.current?.disconnect();};
 //     if(error) {alert(error);}})
 
 
-  return {user,setUser,room,messages, sendMessage,userExists,setUserExists };
+  return {setRoom,user,setUser,room,messages, sendMessage,userExists,setUserExists };
 };
 
 export default useChat;

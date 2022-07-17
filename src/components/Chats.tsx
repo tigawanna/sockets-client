@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useRef,useEffect } from "react";
 import {AiOutlineSend } from 'react-icons/ai';
 import { IconContext } from "react-icons";
 
@@ -29,10 +29,21 @@ export const Chats: React.FC<ChatsProps> = ({ user,messages,sendMessage}) => {
 
 
 
-
+ const inputElement = useRef(null);
  const [input, setInput] = useState({ message: "", time:tyme });
  const [error, setError] = useState({ name:"", message:"" });
 
+ const [size, setSize] = useState({x: window.innerWidth,y: window.innerHeight});
+const updateSize = () =>setSize({x: window.innerWidth,y: window.innerHeight });
+// console.log("window sie ==== ",size)
+ useEffect(() => {
+  //@ts-ignore
+  // inputElement.current.onfocus = () => {
+  //   window.scrollTo(90, 0);
+  //   document.body.scrollTop = 0;
+  // };
+  window.onresize = updateSize
+})
   const handleChange = async (e: any) => {
     const { value } = e.target;
     setInput({
@@ -61,12 +72,15 @@ export const Chats: React.FC<ChatsProps> = ({ user,messages,sendMessage}) => {
   // console.log("messages ==== ",messages)
 
   return (
-    <div className="max-h-[95vh]  overflow-x-hidden overflow-y-hiddenflex flex-col ">
+    <div 
+    style={{maxHeight:size.y}}
+    className="h-full overflow-x-hidden overflow-y-hiddenflex 
+    flex-col justify-between ">
       <div className="m-2"></div>
+      {/* <div className="fixed top-[10%] right-[40%] p-1 z-60 text-3xl font-bold">{size.y}</div> */}
 
       <div
-        className="w-full  flex flex-col items-center overflow-y-scroll 
-         h-[80vh] p-2 scroll-bar"
+        className="w-full h-[55vh] md:h-[80vh] flex flex-col-reverse items-center overflow-y-scroll  p-2 scroll-bar"
       >
         {messages &&
           messages.map((chat: Chat, index: number) => {
@@ -74,7 +88,9 @@ export const Chats: React.FC<ChatsProps> = ({ user,messages,sendMessage}) => {
           })}
       </div>
 
-      <form className="w-full p-1 fixed bottom-0">
+      <form 
+      onSubmit={handleSubmit}
+      className="w-full p-1 fixed bottom-1 ">
         <div className="flex-center">
           <input
              style={{borderColor:isError()?"red":""}}
@@ -83,13 +99,17 @@ export const Chats: React.FC<ChatsProps> = ({ user,messages,sendMessage}) => {
             placeholder="type.."
             onChange={handleChange}
             value={input.message}
-            required={true}
+   
+            autoComplete={"off"}
           />
+          <button type="submit">
             <IconContext.Provider value={{
               size: "30px",
               className: "mx-1",
-            }}> <AiOutlineSend  onClick={handleSubmit}/></IconContext.Provider>
-         
+
+            }}>
+           <AiOutlineSend  /></IconContext.Provider>
+               </button>
     </div>
 
       </form>
@@ -117,7 +137,7 @@ export const Chatcard: React.FC<ChatCardProps> = ({ chat,user }) => {
         {chat?.newMessage.message}
         </div>
 
-        <div className="w-[10%] h-full flex flex-col justify-end items-stretch text-sm ">
+        <div className="w-fit font-medium h-full flex flex-col justify-end items-stretch text-sm ">
         <div className="w-full ">{chat?.newMessage.user}</div>
         <div className="w-full ">{chat?.newMessage.time}</div>
       </div>

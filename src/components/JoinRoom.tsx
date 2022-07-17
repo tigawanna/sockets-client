@@ -18,13 +18,14 @@ const handleChange = async (e: any) => {
           ...input,
           [e.target.id]: value,
         });
+
       };
     
  const handleSubmit = async (e: any) => {
-
+  console.log("inputon submit ==== ",input)
   e.preventDefault();
   if(input.username !== ""){
-  localStorage.setItem("user-room",JSON.stringify(input));
+     localStorage.setItem("user-room",JSON.stringify(input));
   setUser(input)
   setUserExists(true)
   }

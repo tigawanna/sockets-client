@@ -1,6 +1,7 @@
 import React, { useState, useRef,useEffect } from "react";
 import {AiOutlineSend } from 'react-icons/ai';
 import { IconContext } from "react-icons";
+import { makeTimeStamp } from './../utils/utils';
 
 
 type Chat ={ newMessage:{message: string; time: string,user:string }};
@@ -20,29 +21,15 @@ sendMessage: (message:Message) => void
 export const Chats: React.FC<ChatsProps> = ({ user,messages,sendMessage}) => {
 
   // console.log("user in chat === ",user)
-  const tyme =
-    new Date(Date.now()).getHours() +
-    ":" +
-    new Date(Date.now()).getMinutes() +
-    ":" +
-    new Date(Date.now()).getSeconds();
 
-
-
- const inputElement = useRef(null);
- const [input, setInput] = useState({ message: "", time:tyme });
+const [input, setInput] = useState({ message: "", time:makeTimeStamp() });
  const [error, setError] = useState({ name:"", message:"" });
 
  const [size, setSize] = useState({x: window.innerWidth,y: window.innerHeight});
 const updateSize = () =>setSize({x: window.innerWidth,y: window.innerHeight });
-// console.log("window sie ==== ",size)
+
  useEffect(() => {
-  //@ts-ignore
-  // inputElement.current.onfocus = () => {
-  //   window.scrollTo(90, 0);
-  //   document.body.scrollTop = 0;
-  // };
-  window.onresize = updateSize
+window.onresize = updateSize
 })
   const handleChange = async (e: any) => {
     const { value } = e.target;
@@ -56,7 +43,7 @@ const updateSize = () =>setSize({x: window.innerWidth,y: window.innerHeight });
     e.preventDefault();
     // console.log("submit in form ====",input.message)
     if (input.message !== "" && user.username !=="") {
-      const message = { message: input.message, time: tyme,user:user.username };
+      const message = { message: input.message, time:input.time,user:user.username };
       // console.log("message ====",message)
       sendMessage(message)
       setError({name:"",message:""})
@@ -69,7 +56,7 @@ const updateSize = () =>setSize({x: window.innerWidth,y: window.innerHeight });
   const isError=()=>{
     if(error.name === "") return false
     return true}
-  // console.log("messages ==== ",messages)
+ 
 
   return (
     <div 
@@ -124,24 +111,30 @@ interface ChatCardProps {
 }
 
 export const Chatcard: React.FC<ChatCardProps> = ({ chat,user }) => {
+  
+const isMe = chat.newMessage.user === user.username
   // console.log("chat in chat card ==== ",chat)
   return (
     <div className="flex-center w-full m-2">
-    <div className="capitalize p-5 h-6 w-6 text-xl font-bold mr-1 border border-slate-400
-        rounded-[50%] flex-center"> {chat?.newMessage.user[0]}</div>
+
+    <div 
+    style={{backgroundColor:isMe?"purple":"white",color:isMe?"white":""}}
+    className="capitalize p-5 h-6 w-6 text-xl font-bold mr-1 border-2 border-slate-400
+    rounded-[50%] flex-center"> {chat?.newMessage.user[0]}</div>
   
-  <div className="w-[80%] h-full border border-slate-800  rounded-md
+      <div className="w-[80%] h-full border border-slate-800  rounded-md
      m-1 p-2 flex justify-between items-center">
  
       <div className="max-w-[80%] h-fit break-words whitespace-normal text-mdfont-normal">
         {chat?.newMessage.message}
-        </div>
+      </div>
 
         <div className="w-fit font-medium h-full flex flex-col justify-end items-stretch text-sm ">
         <div className="w-full ">{chat?.newMessage.user}</div>
         <div className="w-full ">{chat?.newMessage.time}</div>
       </div>
     </div>
+
     </div>
   );
 };

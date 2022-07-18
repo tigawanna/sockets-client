@@ -25,8 +25,10 @@ const handleChange = async (e: any) => {
   console.log("inputon submit ==== ",input)
   e.preventDefault();
   if(input.username !== ""){
-     localStorage.setItem("user-room",JSON.stringify(input));
-  setUser(input)
+  const roomname = input.room.toLowerCase()
+  const room_data = {username:input.username,room:roomname} 
+  localStorage.setItem("user-room",JSON.stringify(room_data));
+  setUser(room_data)
   setUserExists(true)
   }
   else{

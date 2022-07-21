@@ -19,7 +19,7 @@ const [room, setRoom] = useState<Room>({users:0,room:""});
 
 
 useEffect(() => {
-socketRef.current = socketIOClient(lanUrl, {
+socketRef.current = socketIOClient(prodUrl, {
 query: { room:user.room,user:user.username },
 transports: ["websocket"],
 withCredentials: true,

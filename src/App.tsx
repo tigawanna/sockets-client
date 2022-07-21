@@ -1,25 +1,40 @@
-import { MainChatRoom } from "./components/MainChatRoom";
-import useChat from './utils/useChat';
-import { Toolbar } from './components/Toolbar';
+
+import { JoinRoom } from './components/JoinRoom';
+import React from 'react'
+import UserContext from "./utils/context";
+import { Chats } from './components/Chats';
 
 
+export interface User{username:string ; room:string}
+
+let the_user:User
+const user_room= localStorage.getItem("user-room");
+if(user_room)
+the_user = JSON.parse(user_room); 
 
 function App() {
+  
+  const [user, setUser] = React.useState<User>(the_user);
+  const updateUser = (new_user:User) => {setUser(new_user)};
 
- const {setRoom,user,setUser,room,messages,sendMessage,userExists,setUserExists} = useChat("genaral")
- console.log("room ==== ",room)
-  return (
-    <div className="scroll-bar flex flex-col justify-between h-screen w-screen ">
-      <div className="fixed top-[0px] w-[100%] z-60">
-        <Toolbar room={room} setUserExists={setUserExists} setRoom={setRoom}/>
-      </div>
-    <div className="w-full h-[90%] mt-12  ">  
-    <MainChatRoom messages={messages} user={user} setUser={setUser} sendMessage={sendMessage}
-    userExists={userExists} setUserExists={setUserExists}
-    />
-    </div>
+//  const {setRoom,room,messages,sendMessage,userExists,setUserExists} = useChat("genaral")
+ const user_exists = user && user.username !==""
+
+
+
+return (
+<div className="scroll-bar flex flex-col justify-between h-screen w-screen ">
+
+<UserContext.Provider  value ={{user,updateUser}}>
+{user_exists?<Chats />:<JoinRoom/>}  
+</UserContext.Provider>
+
   </div>
   );
 }
 
 export default App;
+
+
+{/* <Chats  user={user} messages={messages} sendMessage={sendMessage} room={room} 
+setRoom={setRoom} setUserExists={setUserExists}/> */}

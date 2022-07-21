@@ -1,16 +1,26 @@
-import React, {useState} from "react";
+import React, {useContext, useState} from "react";
+import UserContext from './../utils/context';
+import axios from 'axios';
 
 
 interface JoinRoomProps {
-setUser: React.Dispatch<any>
-setUserExists: React.Dispatch<React.SetStateAction<boolean>>
+
 
 }
 
-export const JoinRoom: React.FC<JoinRoomProps> = ({setUser,setUserExists}) => {
+export const JoinRoom: React.FC<JoinRoomProps> = () => {
     
 const [input, setInput] = useState({ username: "", room: "general" });
 const [error, setError] = useState({ name:"", message:"" });
+
+const lanUrl="http://192.168.43.238:4000"
+// const instance = axios.create({baseURL:lanUrl,timeout: 1000, headers: {'X-Custom-Header': 'foobar'}
+// });
+const client = axios.create({
+  baseURL:lanUrl
+});
+const user = useContext(UserContext);
+//console.log("JoinRoom.tsx  user ==== ",user.user)
 
 const handleChange = async (e: any) => {
         const { value } = e.target;
@@ -21,15 +31,38 @@ const handleChange = async (e: any) => {
 
       };
     
- const handleSubmit = async (e: any) => {
-  console.log("inputon submit ==== ",input)
+
+  const handleSubmit = async (e: any) => {
+  //console.log("inputon submit ==== ",input)
   e.preventDefault();
+
+  
   if(input.username !== ""){
   const roomname = input.room.toLowerCase()
   const room_data = {username:input.username,room:roomname} 
+  // localStorage.setItem("user-room",JSON.stringify(room_data));
+  // user.updateUser(room_data)
+
+  client.post('/users', {user:room_data})
+  .then( (response)=> {
+  const user_exist =response.data.data
+  //console.log("user exists? === ",user_exist)
+
+  if(!user_exist){
+
   localStorage.setItem("user-room",JSON.stringify(room_data));
-  setUser(room_data)
-  setUserExists(true)
+  user.updateUser(room_data)  
+  }
+  else{
+    setError({name:"username",message:"username exists"})
+  }
+  })
+  .catch(function (error) {
+    //console.log("error logging in === ",error)
+    setError({name:"username",message:"connection error"})
+  });
+
+
   }
   else{
   setError({name:"username",message:"nick name needed"})

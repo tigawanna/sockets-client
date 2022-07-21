@@ -1,36 +1,37 @@
-import React, { useState, useRef,useEffect } from "react";
+import React, { useState, useRef,useEffect,useContext } from "react";
 import {AiOutlineSend } from 'react-icons/ai';
 import { IconContext } from "react-icons";
 import { makeTimeStamp } from './../utils/utils';
+import { Toolbar } from './Toolbar';
+import { Chat, Message } from './../utils/types';
+import UserContext from "../utils/context";
+import useChats from "../utils/useChats";
 
 
-type Chat ={ newMessage:{message: string; time: string,user:string }};
-interface Message{
-  message: string;
-  time: string;
-  user: string;
-}
+
 interface ChatsProps {
-user: { username: string; room: string;}
-messages:any
-sendMessage: (message:Message) => void
 
 }
 
 
-export const Chats: React.FC<ChatsProps> = ({ user,messages,sendMessage}) => {
+export const Chats: React.FC<ChatsProps> = ({}) => {
 
-  // console.log("user in chat === ",user)
+
+const user = useContext(UserContext);
+// //console.log("Text.tsx  user ==== ",user.user)
+
+const {room,messages,sendMessage} = useChats(user.user)
 
 const [input, setInput] = useState({ message: "", time:makeTimeStamp() });
- const [error, setError] = useState({ name:"", message:"" });
+const [error, setError] = useState({ name:"", message:"" });
 
  const [size, setSize] = useState({x: window.innerWidth,y: window.innerHeight});
-const updateSize = () =>setSize({x: window.innerWidth,y: window.innerHeight });
+ const updateSize = () =>setSize({x: window.innerWidth,y: window.innerHeight });
 
  useEffect(() => {
-window.onresize = updateSize
-})
+   window.onresize = updateSize
+    })
+
   const handleChange = async (e: any) => {
     const { value } = e.target;
     setInput({
@@ -41,14 +42,14 @@ window.onresize = updateSize
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-    // console.log("submit in form ====",input.message)
-    if (input.message !== "" && user.username !=="") {
-      const message = { message: input.message, time:input.time,user:user.username };
-      // console.log("message ====",message)
+    // //console.log("submit in form ====",input.message)
+    if (input.message !== "" && user.user.username !=="") {
+      const message = { message: input.message, time:input.time,user:user.user.username };
+      // //console.log("message ====",message)
       sendMessage(message)
       setError({name:"",message:""})
     }else{
-      console.log("error ====",input,user)
+      //console.log("error ====",input,user)
       setError({name:"username",message:"type something"})
     }
   };
@@ -61,17 +62,19 @@ window.onresize = updateSize
   return (
     <div 
     style={{maxHeight:size.y}}
-    className="h-full overflow-x-hidden overflow-y-hiddenflex 
-    flex-col justify-between ">
-      <div className="m-2"></div>
+    className="h-full overflow-x-hidden overflow-y-hiddenflex flex-col justify-between ">
+
+      <div className="fixed top-[0px] w-[100%] z-60">
+      <Toolbar room={room}  updateUser={user.updateUser}/>
+      </div>
       {/* <div className="fixed top-[10%] right-[40%] p-1 z-60 text-3xl font-bold">{size.y}</div> */}
 
       <div
-        className="w-full h-[55vh] md:h-[80vh] flex flex-col-reverse items-center overflow-y-scroll  p-2 scroll-bar"
+        className="mt-10 w-full h-[55vh] md:h-[80vh] flex flex-col-reverse items-center overflow-y-scroll  p-2 scroll-bar"
       >
         {messages &&
           messages.map((chat: Chat, index: number) => {
-            return <Chatcard  key={index} chat={chat} user={user}/>;
+            return <Chatcard  key={index} chat={chat} user={user.user}/>;
           })}
       </div>
 
@@ -113,7 +116,7 @@ interface ChatCardProps {
 export const Chatcard: React.FC<ChatCardProps> = ({ chat,user }) => {
   
 const isMe = chat.newMessage.user === user.username
-  // console.log("chat in chat card ==== ",chat)
+  // //console.log("chat in chat card ==== ",chat)
   return (
     <div className="flex-center w-full m-2">
 

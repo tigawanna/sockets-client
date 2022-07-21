@@ -1,4 +1,4 @@
-export const makeTimeStamp=()=>{
+  export const makeTimeStamp=()=>{
 
     const hour = new Date(Date.now()).getHours()    
     const min = new Date(Date.now()).getMinutes()

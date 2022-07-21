@@ -1,12 +1,13 @@
 import React from 'react'
 import {BiExit} from 'react-icons/bi'
+import { User } from './../App';
+
 interface ToolbarProps {
 room:any
-setUserExists: React.Dispatch<React.SetStateAction<boolean>>
-setRoom: React.Dispatch<any>
+updateUser: (user: User) => void
 }
 
-export const Toolbar: React.FC<ToolbarProps> = ({room,setUserExists,setRoom}) => {
+export const Toolbar: React.FC<ToolbarProps> = ({room,updateUser}) => {
 return (
  <div className='bg-slate-600 text-white p-1 w-full flex justify-between items-center h-12'>
   <div className='p-2 m-1 text-xl font-bold flex'>
@@ -16,9 +17,7 @@ return (
    flex-center cursor-pointer'
    onClick={()=>{
     localStorage.removeItem('user-room') ;
-     setUserExists(false)
-     setRoom({room:"",user:""})
-    
+    updateUser({username:"",room:""})
     }}><BiExit/></div>:null}
 
     </div>

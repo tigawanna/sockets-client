@@ -19,13 +19,14 @@ export const Chats: React.FC<ChatsProps> = ({}) => {
 
 
 const user = useContext(UserContext);
-// //console.log("Text.tsx  user ==== ",user.user)
+//console.log("Text.tsx  user ==== ",user.user)
 
 const {room,messages,sendMessage} = useChats(user.user)
 
 
-const room_loaded = room.users>0
+const room_loaded = room.users>0 && user.user.username !== ""
 
+console.log("Text.tsx  room ==== ",room)
 
 const [input, setInput] = useState({ message: "", time:makeTimeStamp() });
 const [error, setError] = useState({ name:"", message:"" });

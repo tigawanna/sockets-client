@@ -16,9 +16,7 @@ function App() {
   
   const [user, setUser] = React.useState<User>(the_user);
   const updateUser = (new_user:User) => {setUser(new_user)};
-
-//  const {setRoom,room,messages,sendMessage,userExists,setUserExists} = useChat("genaral")
- const user_exists = user && user.username !==""
+  const user_exists = user && user.username !==""
 
 
 
@@ -36,5 +34,4 @@ return (
 export default App;
 
 
-{/* <Chats  user={user} messages={messages} sendMessage={sendMessage} room={room} 
-setRoom={setRoom} setUserExists={setUserExists}/> */}
+

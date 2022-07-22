@@ -6,6 +6,7 @@ import { Toolbar } from './Toolbar';
 import { Chat, Message } from './../utils/types';
 import UserContext from "../utils/context";
 import useChats from "../utils/useChats";
+import { Loading } from './Loading';
 
 
 
@@ -21,6 +22,10 @@ const user = useContext(UserContext);
 // //console.log("Text.tsx  user ==== ",user.user)
 
 const {room,messages,sendMessage} = useChats(user.user)
+
+
+const room_loaded = room.users>0
+
 
 const [input, setInput] = useState({ message: "", time:makeTimeStamp() });
 const [error, setError] = useState({ name:"", message:"" });
@@ -58,7 +63,9 @@ const [error, setError] = useState({ name:"", message:"" });
     if(error.name === "") return false
     return true}
  
-
+  if(!room_loaded){
+      return <Loading/>
+  }
   return (
     <div 
     style={{maxHeight:size.y}}

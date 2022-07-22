@@ -13,12 +13,14 @@ export const JoinRoom: React.FC<JoinRoomProps> = () => {
 const [input, setInput] = useState({ username: "", room: "general" });
 const [error, setError] = useState({ name:"", message:"" });
 
+
+
+const devUrl="http://localhost:4000"
 const lanUrl="http://192.168.43.238:4000"
-// const instance = axios.create({baseURL:lanUrl,timeout: 1000, headers: {'X-Custom-Header': 'foobar'}
-// });
-const client = axios.create({
-  baseURL:lanUrl
-});
+const prodUrl="https://sockets-server-ke.herokuapp.com/"
+
+
+const client = axios.create({ baseURL:prodUrl});
 const user = useContext(UserContext);
 //console.log("JoinRoom.tsx  user ==== ",user.user)
 
@@ -39,7 +41,8 @@ const handleChange = async (e: any) => {
   
   if(input.username !== ""){
   const roomname = input.room.toLowerCase()
-  const room_data = {username:input.username,room:roomname} 
+  const username = input.room.toLowerCase()
+  const room_data = {username,room:roomname}
   // localStorage.setItem("user-room",JSON.stringify(room_data));
   // user.updateUser(room_data)
 

@@ -41,7 +41,7 @@ const handleChange = async (e: any) => {
   
   if(input.username !== ""){
   const roomname = input.room.toLowerCase()
-  const username = input.room.toLowerCase()
+  const username = input.username.toLowerCase()
   const room_data = {username,room:roomname}
   // localStorage.setItem("user-room",JSON.stringify(room_data));
   // user.updateUser(room_data)
